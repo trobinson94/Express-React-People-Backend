@@ -32,11 +32,11 @@ mongoose.connection
 ///////////////////////////////
 // MODELS
 ////////////////////////////////
-const PeopleSchema = mew mongoose.Schema({
+const PeopleSchema = new mongoose.Schema({
     name: String,
     image: String,
     title: String
-});
+  });
 
 const People = mongoose.model("People", PeopleSchema);
 
@@ -76,6 +76,25 @@ app.post("/people", async (req, res) => {
       res.status(400).json(error);
     }
   });
+
+// People Update Route 
+app.put("/people/:id", async (req, res) => {
+    try {
+        res.json(await People.findByIdAndUpdate(req.params.id, req.body, {new: true}))
+    } catch (error){
+        res.status(400).json(error)
+    }
+})
+
+// People Delete Route
+app.delete("/people/:id", async (req, res) => {
+    try {
+      res.json(await People.findByIdAndRemove(req.params.id));
+    } catch (error) {
+      res.status(400).json(error);
+    }
+  });
+
 
 ///////////////////////////////
 // LISTENER
